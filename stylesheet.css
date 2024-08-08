@@ -1,0 +1,13 @@
+body{
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.cotainer{
+    width: 50%;
+    height: 5cm;
+}
+
+.header{
+    background-color: white;
+    padding: 3cm;
+}
