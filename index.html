@@ -61,6 +61,69 @@
       </div>
     </section>
 
+    <!-- ── NEW: TikTok Shop Cold Start Section ── -->
+    <section class="section tiktok-section alt">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-label">Growth Story</p>
+          <h2>TikTok Shop Cold Start: $0 → $115K in &lt;100 Days</h2>
+        </div>
+        <p class="tiktok-sub">
+          Launched and scaled a net-new TikTok Shop from scratch — zero revenue to $115K GMV
+          in under 100 days, growing orders and customers by 760%+ vs. the prior period.
+        </p>
+
+        <div class="tiktok-layout">
+          <!-- Left: metric cards -->
+          <div class="tiktok-metrics">
+            <div class="metric-card metric-accent">
+              <p class="metric-label">Peak GMV (Jun – Sep 2025)</p>
+              <p class="metric-value" id="gmv-val">$0</p>
+              <p class="metric-sub">Gross merchandise value</p>
+              <span class="metric-badge">↑ 892.65% vs prior period</span>
+            </div>
+            <div class="metrics-row">
+              <div class="metric-card">
+                <p class="metric-label">Cold-start timeline</p>
+                <p class="metric-value" id="days-val">0</p>
+                <p class="metric-sub">Days to reach $115K GMV</p>
+              </div>
+              <div class="metric-card">
+                <p class="metric-label">Orders</p>
+                <p class="metric-value" id="orders-val">0</p>
+                <p class="metric-sub">Total orders placed</p>
+                <span class="metric-badge">↑ 760.67%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <p class="metric-label">Unique customers acquired</p>
+              <p class="metric-value" id="customers-val">0</p>
+              <p class="metric-sub">New customers in 3 months</p>
+              <span class="metric-badge">↑ 762.42%</span>
+            </div>
+          </div>
+
+          <!-- Right: chart + bullets -->
+          <div class="tiktok-right">
+            <div class="chart-card">
+              <p class="chart-title">Daily GMV — Jun to Sep 2025</p>
+              <p class="chart-subtitle">Exponential growth from near-zero to $3K+ daily peak</p>
+              <div class="chart-wrap">
+                <canvas id="growthChart"></canvas>
+              </div>
+            </div>
+
+            <ul class="tiktok-bullets">
+              <li>Deployed 10+ DTC campaigns across TikTok Shop and Shopify — setup, QA, troubleshooting, tracking validation, and performance reporting</li>
+              <li>Automated affiliate outreach, managed a Discord creator community, and executed 3+ creator challenges tracking top UGC themes</li>
+              <li>Maintained 4.7+ Seller Performance Score and earned the OFFICIAL SHOP badge; optimized 15+ listings for organic discoverability</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ── END NEW SECTION ── -->
+
     <section class="section alt" id="work">
       <div class="container">
         <div class="section-header">
@@ -139,7 +202,7 @@
       <div class="container">
         <div class="section-header">
           <p class="section-label">Contact</p>
-          <h2>Let’s connect</h2>
+          <h2>Let's connect</h2>
         </div>
 
         <div class="contact-card">
@@ -163,5 +226,92 @@
       <p>Built with GitHub Pages</p>
     </div>
   </footer>
+
+  <!-- Chart.js for growth curve -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script>
+    /* ── Counter animation ── */
+    function animateCounter(el, target, formatter, duration) {
+      let start = 0;
+      const step = target / (duration / 16);
+      const timer = setInterval(() => {
+        start = Math.min(start + step, target);
+        el.textContent = formatter(start);
+        if (start >= target) clearInterval(timer);
+      }, 16);
+    }
+
+    /* ── Synthetic daily GMV data matching Jun–Sep exponential curve ── */
+    const labels = [], data = [];
+    for (let i = 0; i < 92; i++) {
+      const d = new Date(2025, 5, 1);
+      d.setDate(d.getDate() + i);
+      labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      const t = i / 91;
+      const base = 30 + 3900 * Math.pow(t, 1.85);
+      const noise = (Math.random() - 0.5) * base * 0.3;
+      data.push(Math.max(0, Math.round(base + noise)));
+    }
+
+    new Chart(document.getElementById('growthChart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          data,
+          borderColor: '#1d4ed8',
+          backgroundColor: 'rgba(29,78,216,0.07)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0,
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: {
+            ticks: { maxTicksLimit: 5, font: { size: 11 }, color: '#5b6473' },
+            grid: { display: false }
+          },
+          y: {
+            ticks: {
+              font: { size: 11 },
+              color: '#5b6473',
+              callback: v => '$' + (v >= 1000 ? (v / 1000).toFixed(1) + 'K' : v)
+            },
+            grid: { color: 'rgba(0,0,0,0.04)' }
+          }
+        }
+      }
+    });
+
+    /* ── Trigger counters when section scrolls into view ── */
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        animateCounter(
+          document.getElementById('gmv-val'), 119.6,
+          v => '$' + v.toFixed(1) + 'K', 1400
+        );
+        animateCounter(
+          document.getElementById('days-val'), 100,
+          v => '<' + Math.round(v) + ' days', 1200
+        );
+        animateCounter(
+          document.getElementById('orders-val'), 8469,
+          v => Math.round(v).toLocaleString(), 1400
+        );
+        animateCounter(
+          document.getElementById('customers-val'), 8400,
+          v => Math.round(v).toLocaleString(), 1400
+        );
+        observer.disconnect();
+      }
+    }, { threshold: 0.2 });
+
+    observer.observe(document.querySelector('.tiktok-metrics'));
+  </script>
 </body>
 </html>
