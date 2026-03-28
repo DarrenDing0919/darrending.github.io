@@ -481,6 +481,29 @@ a {
   margin: 0 0 4px;
 }
 
+.chart-title-link {
+  color: var(--text);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s ease;
+}
+
+.chart-title-link:hover {
+  color: var(--primary);
+}
+
+.chart-title-icon {
+  font-size: 0.78rem;
+  color: var(--muted);
+  transition: color 0.15s ease;
+}
+
+.chart-title-link:hover .chart-title-icon {
+  color: var(--primary);
+}
+
 .chart-subtitle {
   font-size: 0.8rem;
   color: var(--muted);
