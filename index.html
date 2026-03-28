@@ -257,48 +257,90 @@
       }, 16);
     }
 
-    /* ── Synthetic daily GMV data matching Jun–Sep exponential curve ── */
-    const labels = [], data = [];
-    for (let i = 0; i < 92; i++) {
-      const d = new Date(2025, 5, 1);
-      d.setDate(d.getDate() + i);
-      labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-      const t = i / 91;
-      const base = 30 + 3900 * Math.pow(t, 1.85);
-      const noise = (Math.random() - 0.5) * base * 0.3;
-      data.push(Math.max(0, Math.round(base + noise)));
-    }
+    /* ── Real daily data from TikTok Shop analytics (Jun 1 – Sep 1, 2025) ── */
+    const labels = ["Jun 1","Jun 2","Jun 3","Jun 4","Jun 5","Jun 6","Jun 7","Jun 8","Jun 9","Jun 10","Jun 11","Jun 12","Jun 13","Jun 14","Jun 15","Jun 16","Jun 17","Jun 18","Jun 19","Jun 20","Jun 21","Jun 22","Jun 23","Jun 24","Jun 25","Jun 26","Jun 27","Jun 28","Jun 29","Jun 30","Jul 1","Jul 2","Jul 3","Jul 4","Jul 5","Jul 6","Jul 7","Jul 8","Jul 9","Jul 10","Jul 11","Jul 12","Jul 13","Jul 14","Jul 15","Jul 16","Jul 17","Jul 18","Jul 19","Jul 20","Jul 21","Jul 22","Jul 23","Jul 24","Jul 25","Jul 26","Jul 27","Jul 28","Jul 29","Jul 30","Jul 31","Aug 1","Aug 2","Aug 3","Aug 4","Aug 5","Aug 6","Aug 7","Aug 8","Aug 9","Aug 10","Aug 11","Aug 12","Aug 13","Aug 14","Aug 15","Aug 16","Aug 17","Aug 18","Aug 19","Aug 20","Aug 21","Aug 22","Aug 23","Aug 24","Aug 25","Aug 26","Aug 27","Aug 28","Aug 29","Aug 30","Aug 31","Sep 1"];
+    const gmvData = [174.1,152.49,162.79,249,335.02,114.7,138.05,204.32,202.98,263.02,127.67,143.13,193.44,145.48,64.93,371.61,341.77,423.22,474.54,432.87,201.42,227.01,373.03,413.82,617.62,245.01,296.62,404.06,440.32,468.28,509.3,876.23,858.28,878.13,1064.42,1195.49,971.34,555.35,986.98,677.84,1270.65,849.4,1451.37,1657.12,1980.85,1243.41,1188.32,1335.51,1141.14,1260.36,1413.89,704.99,1031.33,686.58,1575.83,957.43,1055.98,876.58,991.06,658.56,1468.5,1401.59,1259.48,1163.29,1924.43,1764.61,2158.24,2213.75,1577.25,1395.68,2119.01,2936.52,2253.44,2766.89,2082.15,2581.1,2160.68,2510.06,3703.05,3219.25,3331.88,3252.44,3179.34,2754.3,2691.54,2501.62,2430,2597.52,2392.32,3000.19,2705.89,3340.18,2505.77];
+    const ordersData = [12,10,13,17,24,9,12,15,9,14,11,10,12,7,7,28,24,30,36,32,15,17,29,28,44,17,16,24,25,28,30,49,54,58,71,77,64,37,58,44,82,51,97,110,134,82,78,85,77,71,78,41,59,41,97,59,71,57,64,41,93,95,83,75,127,116,153,167,110,90,145,209,171,194,148,174,151,176,274,251,258,254,250,214,221,195,195,204,192,228,215,264,185];
 
     new Chart(document.getElementById('growthChart'), {
       type: 'line',
       data: {
         labels,
-        datasets: [{
-          data,
-          borderColor: '#1d4ed8',
-          backgroundColor: 'rgba(29,78,216,0.07)',
-          fill: true,
-          tension: 0.4,
-          pointRadius: 0,
-          borderWidth: 2
-        }]
+        datasets: [
+          {
+            label: 'GMV',
+            data: gmvData,
+            borderColor: '#0ea5e9',
+            backgroundColor: 'rgba(14,165,233,0.08)',
+            fill: true,
+            tension: 0.35,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#0ea5e9',
+            borderWidth: 2,
+            yAxisID: 'yGMV'
+          },
+          {
+            label: 'Orders',
+            data: ordersData,
+            borderColor: '#1d4ed8',
+            backgroundColor: 'transparent',
+            fill: false,
+            tension: 0.35,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#1d4ed8',
+            borderWidth: 2,
+            borderDash: [],
+            yAxisID: 'yOrders'
+          }
+        ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            align: 'end',
+            labels: { font: { size: 11 }, color: '#5b6473', boxWidth: 16, padding: 12 }
+          },
+          tooltip: {
+            backgroundColor: '#fff',
+            borderColor: '#dbe2ea',
+            borderWidth: 1,
+            titleColor: '#111827',
+            bodyColor: '#5b6473',
+            padding: 12,
+            callbacks: {
+              title: ctx => ctx[0].label,
+              label: ctx => {
+                if (ctx.dataset.label === 'GMV') return '  GMV: $' + ctx.parsed.y.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return '  Orders: ' + ctx.parsed.y;
+              }
+            }
+          }
+        },
         scales: {
           x: {
-            ticks: { maxTicksLimit: 5, font: { size: 11 }, color: '#5b6473' },
+            ticks: { maxTicksLimit: 6, font: { size: 11 }, color: '#5b6473' },
             grid: { display: false }
           },
-          y: {
+          yGMV: {
+            position: 'left',
             ticks: {
               font: { size: 11 },
               color: '#5b6473',
               callback: v => '$' + (v >= 1000 ? (v / 1000).toFixed(1) + 'K' : v)
             },
             grid: { color: 'rgba(0,0,0,0.04)' }
+          },
+          yOrders: {
+            position: 'right',
+            ticks: { font: { size: 11 }, color: '#5b6473' },
+            grid: { display: false }
           }
         }
       }
