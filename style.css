@@ -93,6 +93,45 @@ a {
   margin: 0 0 18px;
 }
 
+/* ── Hero word cloud ── */
+.wordcloud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  margin: 0 0 22px;
+  max-width: 720px;
+}
+
+.wc {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  transition: opacity 0.2s ease;
+  cursor: default;
+  user-select: none;
+}
+
+/* sizes */
+.wc-xl { font-size: clamp(2.8rem, 6vw, 4.2rem); }
+.wc-lg { font-size: clamp(1.8rem, 3.8vw, 2.6rem); }
+.wc-md { font-size: clamp(1.25rem, 2.4vw, 1.75rem); }
+.wc-sm { font-size: clamp(0.9rem, 1.6vw, 1.15rem); font-weight: 600; }
+
+/* shades — all in the primary blue family */
+.wc-dark  { color: #1d4ed8; }
+.wc-mid   { color: #3b82f6; }
+.wc-light { color: #6ea8fe; }
+.wc-faint { color: #a5c4fd; }
+
+/* subtle rotation for organic feel */
+.wc:nth-child(3)  { transform: rotate(-1.5deg); display: inline-block; }
+.wc:nth-child(5)  { transform: rotate(1deg);    display: inline-block; }
+.wc:nth-child(7)  { transform: rotate(-1deg);   display: inline-block; }
+
+.wordcloud:hover .wc { opacity: 0.4; }
+.wordcloud:hover .wc:hover { opacity: 1; }
+
 .subtitle {
   font-size: 1.08rem;
   color: var(--muted);
@@ -183,6 +222,47 @@ a {
   margin-bottom: 0;
 }
 
+/* ── About card typography ── */
+.about-lead {
+  font-size: 1.13rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.65;
+  margin: 0 0 16px;
+}
+
+.about-lead em {
+  font-style: normal;
+  color: var(--muted);
+}
+
+.about-lead strong {
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.about-body {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0 0 14px;
+}
+
+.about-body strong {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.about-intent-text {
+  margin-bottom: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.about-intent-text strong {
+  color: var(--primary);
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -219,6 +299,12 @@ a {
 
 .card-body li + li {
   margin-top: 8px;
+}
+
+.card-body li strong,
+.card-text strong {
+  color: var(--text);
+  font-weight: 700;
 }
 
 .card-footer {
@@ -433,6 +519,16 @@ a {
   height: 6px;
   background: var(--primary);
   border-radius: 50%;
+}
+
+.tiktok-bullets li strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.tiktok-sub strong {
+  color: var(--text);
+  font-weight: 700;
 }
 
 /* ── Responsive ── */
